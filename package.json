@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
-  },"repository": {
+  },
+  "repository": {
     "type": "git",
     "url": "https://github.com/Saulo-SDS/MyWallet-back"
   },
@@ -25,5 +26,8 @@
     "joi": "^17.4.2",
     "pg": "^8.7.1",
     "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.14"
   }
 }
