@@ -2,13 +2,17 @@ import connection from "../config/db.js";
 
 const deleteSession = async (req, res) => {
 
+    const authorization = req.headers['authorization']?.replace('Bearer ', '');
+    console.log(authorization);
+    
+    if(!authorization) return res.sendStatus(401);
+
     try{
-        const { token } = req.params;
-        const resul = await connection.query('DELETE FROM sessions WHERE token = $1', [token]);
-        
+        const resul = await connection.query('DELETE FROM sessions WHERE token = $1', [authorization]);
         if(resul.rowCount === 0) return res.sendStatus(404);
         res.sendStatus(200);
-    }catch{
+
+    }catch (error){
         res.sendStatus(500);
     }
 }

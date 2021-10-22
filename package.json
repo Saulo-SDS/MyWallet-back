@@ -19,11 +19,14 @@
   "author": "Saulo Silva",
   "license": "ISC",
   "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "@hapi/joi-date": "^2.0.1",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dayjs": "^1.10.7",
     "express": "^4.17.1",
     "joi": "^17.4.2",
+    "moment": "^2.29.1",
     "pg": "^8.7.1",
     "uuid": "^8.3.2"
   },
