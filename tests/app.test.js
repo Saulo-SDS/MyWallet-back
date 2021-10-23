@@ -16,7 +16,7 @@ afterAll( async () => {
     connection.end();
 });
 
-describe("POST /sing-up", () => {
+describe("POST /sign-up", () => {
 
     it("returns 400 for invalid params", async () => {
 
@@ -27,7 +27,7 @@ describe("POST /sing-up", () => {
         }
 
         const resul = await supertest(app)
-                            .post('/sing-up')
+                            .post('/sign-up')
                             .send(body);
 
         expect(resul.status).toEqual(400);
@@ -42,7 +42,7 @@ describe("POST /sing-up", () => {
         }
 
         const resul = await supertest(app)
-                            .post('/sing-up')
+                            .post('/sign-up')
                             .send(body);
        
         expect(resul.status).toEqual(201);
@@ -57,7 +57,7 @@ describe("POST /sing-up", () => {
         }
 
         const resul = await supertest(app)
-                            .post('/sing-up')
+                            .post('/sign-up')
                             .send(body);
 
         expect(resul.status).toEqual(409);
@@ -65,7 +65,7 @@ describe("POST /sing-up", () => {
 
 });
 
-describe("GET /sing-in", () => {
+describe("GET /sign-in", () => {
 
     it("returns 200 for valid params", async () => {
 
@@ -78,7 +78,7 @@ describe("GET /sing-in", () => {
         }
 
         const resul = await supertest(app)
-                            .get('/sing-in')
+                            .get('/sign-in')
                             .send(body);
 
         expect(resul.status).toEqual(200);
@@ -98,7 +98,7 @@ describe("GET /sing-in", () => {
         }
 
         const resul = await supertest(app)
-                            .get('/sing-in')
+                            .get('/sign-in')
                             .send(body);
                             
         expect(resul.status).toEqual(400);
@@ -140,7 +140,7 @@ describe("DELETE /user/logout", () => {
         }
 
         const userInfo = await supertest(app)
-                               .get('/sing-in')
+                               .get('/sign-in')
                                .send(body);
         const token = userInfo.body.token;
    
@@ -153,7 +153,7 @@ describe("DELETE /user/logout", () => {
 });
 
 
-describe("POST /user/payment/new", () => {
+describe("POST /user/payments/new", () => {
 
     it("returns 401 for no authorization", async () => {
      
@@ -164,7 +164,7 @@ describe("POST /user/payment/new", () => {
         }
 
         const resul = await supertest(app)
-                            .post('/user/payment/new')
+                            .post('/user/payments/new')
                             .send(body);
 
         expect(resul.status).toEqual(401);
@@ -181,7 +181,7 @@ describe("POST /user/payment/new", () => {
         }
 
         const userInfo = await supertest(app)
-                               .get('/sing-in')
+                               .get('/sign-in')
                                .send(userBody);
 
         const token = userInfo.body.token;
@@ -193,7 +193,7 @@ describe("POST /user/payment/new", () => {
         }
 
         const resul = await supertest(app)
-                            .post('/user/payment/new')
+                            .post('/user/payments/new')
                             .send(body)
                             .set('Authorization', `Bearer ${token}`);
                             
@@ -213,7 +213,7 @@ describe("POST /user/payment/new", () => {
         }
 
         const userInfo = await supertest(app)
-                               .get('/sing-in')
+                               .get('/sign-in')
                                .send(userBody);
 
         const token = userInfo.body.token;
@@ -226,7 +226,7 @@ describe("POST /user/payment/new", () => {
         }
 
         const resul = await supertest(app)
-                            .post('/user/payment/new')
+                            .post('/user/payments/new')
                             .send(body)
                             .set('Authorization', `Bearer ${token}`);
                             
@@ -258,7 +258,7 @@ describe("GET /user/payments", () => {
         }
 
         const userInfo = await supertest(app)
-                            .get('/sing-in')
+                            .get('/sign-in')
                             .send(body);
 
         const token = userInfo.body.token;
