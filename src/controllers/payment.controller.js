@@ -1,33 +1,14 @@
 import connection from "../config/db.js";
-import joi from "joi";
-import JoiDate from "@hapi/joi-date";
-import dayjs from "dayjs";
-import moment from "moment";
+import { paymentSchema } from "../Validate/schemas.js";
 
 const storePayment = async (req, res) => {
     
-    const Joi = joi.extend(JoiDate);
-    const { value, type, date } = req.body;
+    const { value, type, describe, date } = req.body;
     const authorization = req.headers['authorization']?.replace('Bearer ', '');
 
     if(!authorization) return res.sendStatus(401);
 
-    const now = dayjs().format('DD/MM/YYYY');
-
-    const schema = Joi.object({
-        value: Joi.number()
-            .required(),
-        type: Joi.string()
-            .valid('entry', 'exit')
-            .required(),
-        date: Joi.date()
-            .format('YYYY-MM-DD')
-            .max('now')
-            .min(moment().format('YYYY-MM-DD'))
-            .required()
-    });
-
-    const validate = schema.validate({value, type, date});
+    const validate = paymentSchema.validate({value, type, describe, date});
     if(validate.error) return res.sendStatus(400);
 
     try{
@@ -37,7 +18,7 @@ const storePayment = async (req, res) => {
 
         if(!id_user) return res.sendStatus(401);
 
-        await connection.query('INSERT INTO payments (id_user, value, type, date) VALUES ($1, $2, $3, $4)', [id_user, value, type, date]);
+        await connection.query('INSERT INTO payments (id_user, value, type, date, describe) VALUES ($1, $2, $3, $4, $5)', [id_user, value, type, date, describe]);
         res.sendStatus(201);
 
     }catch (error){
@@ -47,7 +28,6 @@ const storePayment = async (req, res) => {
 
 const getPayments = async (req, res) => {
     
-    const Joi = joi.extend(JoiDate);
     const authorization = req.headers['authorization']?.replace('Bearer ', '');
 
     if(!authorization) return res.sendStatus(401);

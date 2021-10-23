@@ -3,8 +3,7 @@ import connection from "../config/db.js";
 const deleteSession = async (req, res) => {
 
     const authorization = req.headers['authorization']?.replace('Bearer ', '');
-    console.log(authorization);
-    
+
     if(!authorization) return res.sendStatus(401);
 
     try{

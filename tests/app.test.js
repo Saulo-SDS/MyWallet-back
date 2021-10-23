@@ -3,6 +3,7 @@ import supertest from "supertest";
 import connection from "../src/config/db.js";
 import app from "../src/app.js";
 import bcrypt from "bcrypt";
+import dayjs from "dayjs";
 import { expect } from "@jest/globals";
 
 
@@ -84,8 +85,7 @@ describe("GET /sing-in", () => {
         expect(resul.body).toEqual(expect.objectContaining({
             token: expect.any(String),
             user: {
-                name: expect.any(String),
-                email: expect.any(String)
+                name: expect.any(String)
             }
         }));
     });
@@ -222,7 +222,7 @@ describe("POST /user/payment/new", () => {
             value: 1500.99,
             type: "entry",
             describe: "Money do freelancer uhuuu",
-            date: "2021-10-22"
+            date: dayjs().format('YYYY-MM-DD')
         }
 
         const resul = await supertest(app)

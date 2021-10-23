@@ -6,7 +6,7 @@ const database = {
     password: '123456',
     host: 'localhost',
     port: 5432,
-    database: 'teste'
+    database: 'mywallet'
 }
 
 const connection = new Pool(database);
