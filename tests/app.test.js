@@ -16,6 +16,14 @@ afterAll( async () => {
     connection.end();
 });
 
+beforeAll( async () => {
+    
+    await connection.query("DELETE FROM users");
+    await connection.query("DELETE FROM sessions");
+    await connection.query("DELETE FROM payments");
+});
+
+
 describe("POST /sign-up", () => {
 
     it("returns 400 for invalid params", async () => {
@@ -65,7 +73,7 @@ describe("POST /sign-up", () => {
 
 });
 
-describe("GET /sign-in", () => {
+describe("POST /sign-in", () => {
 
     it("returns 200 for valid params", async () => {
 
