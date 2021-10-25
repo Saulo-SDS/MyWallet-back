@@ -1,6 +1,6 @@
 import connection from "../config/db.js";
 
-const deleteSession = async (req, res) => {
+async function deleteSession(req, res) {
 
     const authorization = req.headers['authorization']?.replace('Bearer ', '');
 

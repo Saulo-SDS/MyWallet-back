@@ -78,9 +78,8 @@ describe("GET /sign-in", () => {
         }
 
         const resul = await supertest(app)
-                            .get('/sign-in')
+                            .post('/sign-in')
                             .send(body);
-
         expect(resul.status).toEqual(200);
         expect(resul.body).toEqual(expect.objectContaining({
             token: expect.any(String),
@@ -98,7 +97,7 @@ describe("GET /sign-in", () => {
         }
 
         const resul = await supertest(app)
-                            .get('/sign-in')
+                            .post('/sign-in')
                             .send(body);
                             
         expect(resul.status).toEqual(400);
@@ -140,7 +139,7 @@ describe("DELETE /user/logout", () => {
         }
 
         const userInfo = await supertest(app)
-                               .get('/sign-in')
+                               .post('/sign-in')
                                .send(body);
         const token = userInfo.body.token;
    
@@ -181,7 +180,7 @@ describe("POST /user/payments/new", () => {
         }
 
         const userInfo = await supertest(app)
-                               .get('/sign-in')
+                               .post('/sign-in')
                                .send(userBody);
 
         const token = userInfo.body.token;
@@ -213,7 +212,7 @@ describe("POST /user/payments/new", () => {
         }
 
         const userInfo = await supertest(app)
-                               .get('/sign-in')
+                               .post('/sign-in')
                                .send(userBody);
 
         const token = userInfo.body.token;
@@ -258,11 +257,10 @@ describe("GET /user/payments", () => {
         }
 
         const userInfo = await supertest(app)
-                            .get('/sign-in')
+                            .post('/sign-in')
                             .send(body);
 
         const token = userInfo.body.token;
-
         const resul = await supertest(app)
                             .get('/user/payments')
                             .set('Authorization', `Bearer ${token}`);

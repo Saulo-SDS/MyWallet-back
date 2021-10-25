@@ -1,7 +1,7 @@
 import connection from "../config/db.js";
 import { paymentSchema } from "../Validate/schemas.js";
 
-const storePayment = async (req, res) => {
+async function storePayment(req, res) {
     
     const { value, type, describe, date } = req.body;
     const authorization = req.headers['authorization']?.replace('Bearer ', '');
@@ -26,7 +26,7 @@ const storePayment = async (req, res) => {
     }
 }
 
-const getPayments = async (req, res) => {
+async function getPayments(req, res) {
     
     const authorization = req.headers['authorization']?.replace('Bearer ', '');
 
@@ -38,7 +38,7 @@ const getPayments = async (req, res) => {
 
         if(!id_user) return res.sendStatus(401);
 
-        const resulPayments = await connection.query('SELECT value, type, date FROM payments WHERE id_user = $1 ORDER BY id DESC', [id_user]);
+        const resulPayments = await connection.query('SELECT value, type, describe, date FROM payments WHERE id_user = $1 ORDER BY id DESC', [id_user]);
         const resulSoma = await connection.query('SELECT SUM(value) AS balance FROM payments WHERE id_user = $1', [id_user]);
         
         const payments = resulPayments.rows;

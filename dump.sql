@@ -155,8 +155,6 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 --
 
 COPY public.payments (id, id_user, value, type, date, describe) FROM stdin;
-3	1	1689.99	entry	2021-10-23	Money do freelancer
-4	1	-76.99	exit	2021-10-23	Ifood né pai
 \.
 
 
@@ -173,7 +171,6 @@ COPY public.sessions (id, id_user, token) FROM stdin;
 --
 
 COPY public.users (id, name, email, password) FROM stdin;
-1	Dev tester	dev@gmail.com	$2b$10$y87Aj0N/dId8sgu7TvfOfu9hdhz.rlxIxT9U7FEl7mx3T4PPd3rvK
 \.
 
 
@@ -181,23 +178,24 @@ COPY public.users (id, name, email, password) FROM stdin;
 -- Name: payments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.payments_id_seq', 4, true);
+SELECT pg_catalog.setval('public.payments_id_seq', 31, true);
 
 
 --
 -- Name: sessions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.sessions_id_seq', 1, true);
+SELECT pg_catalog.setval('public.sessions_id_seq', 104, true);
 
 
 --
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 1, true);
+SELECT pg_catalog.setval('public.users_id_seq', 99, true);
 
 
 --
 -- PostgreSQL database dump complete
 --
+
