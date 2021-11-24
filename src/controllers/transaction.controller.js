@@ -1,65 +1,66 @@
 import connection from "../database/database.js";
 import { paymentSchema } from "../Validate/schemas.js";
 
-async function storePayment(req, res) {
+async function storeTransaction(req, res) {
   const { value, type, describe, date } = req.body;
-  const authorization = req.headers["authorization"]?.replace("Bearer ", "");
-
-  if (!authorization) return res.sendStatus(401);
-
+  const { userId } = req;
   const validate = paymentSchema.validate({ value, type, describe, date });
   if (validate.error) return res.sendStatus(400);
 
   try {
-    const resul = await connection.query(
-      "SELECT id_user FROM sessions WHERE token = $1",
-      [authorization]
+    const resulTransaction = await connection.query(
+      "INSERT INTO transactions (value, type, date, describe) VALUES ($1, $2, $3, $4) RETURNING id",
+      [value, type, date, describe]
     );
-    const id_user = resul.rows[0]?.id_user;
 
-    if (!id_user) return res.sendStatus(401);
+    const id_transaction = resulTransaction.rows[0].id;
 
     await connection.query(
-      "INSERT INTO payments (id_user, value, type, date, describe) VALUES ($1, $2, $3, $4, $5)",
-      [id_user, value, type, date, describe]
+      "INSERT INTO customer_transactions (id_customer, id_transaction) VALUES ($1, $2) RETURNING id",
+      [userId, id_transaction]
     );
+
     res.sendStatus(201);
   } catch (error) {
     res.sendStatus(500);
   }
 }
 
-async function getPayments(req, res) {
-  const authorization = req.headers["authorization"]?.replace("Bearer ", "");
-
-  if (!authorization) return res.sendStatus(401);
+async function getTransactions(req, res) {
+  const { userId } = req;
 
   try {
-    const resul = await connection.query(
-      "SELECT id_user FROM sessions WHERE token = $1",
-      [authorization]
+    const resulTransaction = await connection.query(
+      `SELECT 
+       t.value,
+       t.type,
+       t.date,
+       t.describe
+       FROM customer_transactions AS ct
+       JOIN transactions AS t ON t.id = ct.id_transaction
+       WHERE id_customer = $1
+      `,
+      [userId]
     );
-    const id_user = resul.rows[0]?.id_user;
 
-    if (!id_user) return res.sendStatus(401);
-
-    const resulPayments = await connection.query(
-      "SELECT value, type, describe, date FROM payments WHERE id_user = $1 ORDER BY id DESC",
-      [id_user]
-    );
     const resulSoma = await connection.query(
-      "SELECT SUM(value) AS balance FROM payments WHERE id_user = $1",
-      [id_user]
+      `SELECT 
+       SUM(t.value) AS balance
+       FROM customer_transactions AS ct
+       LEFT JOIN transactions AS t ON t.id = ct.id_transaction
+       WHERE id_customer = $1
+      `,
+      [userId]
     );
 
-    const payments = resulPayments.rows;
+    const transactions = resulTransaction.rows;
     const { balance } = resulSoma.rows[0];
 
-    const data = { balance, payments };
+    const data = { transactions, balance };
     res.send(data);
   } catch (error) {
     res.sendStatus(500);
   }
 }
 
-export { storePayment, getPayments };
+export { storeTransaction, getTransactions };
