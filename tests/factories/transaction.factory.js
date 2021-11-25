@@ -12,19 +12,19 @@ function generateTransactionBody() {
 }
 
 async function createTransaction() {
-  const user = generateTransactionBody();
-  const passwordHash = bcrypt.hashSync(user.password, 10);
+  const transaction = generateTransactionBody();
+  const passwordHash = bcrypt.hashSync(transaction.password, 10);
 
-  const insertedUser = await connection.query(
+  await connection.query(
     `
           INSERT INTO customers 
           (email, name, password) 
           VALUES ($1, $2, $3)
           ;`,
-    [user.email, user.name, passwordHash]
+    [transaction.email, transaction.name, passwordHash]
   );
 
-  return user;
+  return transaction;
 }
 
 export { generateTransactionBody, createTransaction };
