@@ -5,7 +5,7 @@ import connection from "../src/database/database.js";
 import { createCustomer } from "./factories/customer.factory.js";
 import { generateTransactionBody } from "./factories/transaction.factory.js";
 
-beforeAll(async () => {
+afterAll(async () => {
   await connection.query("DELETE FROM customer_transactions");
   await connection.query("DELETE FROM customers");
   await connection.query("DELETE FROM transactions");

@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 13.4 (Ubuntu 13.4-0ubuntu0.21.04.1)
--- Dumped by pg_dump version 13.4 (Ubuntu 13.4-0ubuntu0.21.04.1)
+-- Dumped from database version 12.9 (Ubuntu 12.9-0ubuntu0.20.04.1)
+-- Dumped by pg_dump version 12.9 (Ubuntu 12.9-0ubuntu0.20.04.1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -21,26 +21,23 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: payments; Type: TABLE; Schema: public; Owner: postgres
+-- Name: customer_transactions; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.payments (
+CREATE TABLE public.customer_transactions (
     id integer NOT NULL,
-    id_user integer,
-    value numeric,
-    type text,
-    date date,
-    describe text
+    id_customer integer NOT NULL,
+    id_transaction integer NOT NULL
 );
 
 
-ALTER TABLE public.payments OWNER TO postgres;
+ALTER TABLE public.customer_transactions OWNER TO postgres;
 
 --
--- Name: payments_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: customer_transactions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE SEQUENCE public.payments_id_seq
+CREATE SEQUENCE public.customer_transactions_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -49,33 +46,34 @@ CREATE SEQUENCE public.payments_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.payments_id_seq OWNER TO postgres;
+ALTER TABLE public.customer_transactions_id_seq OWNER TO postgres;
 
 --
--- Name: payments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: customer_transactions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.payments_id_seq OWNED BY public.payments.id;
+ALTER SEQUENCE public.customer_transactions_id_seq OWNED BY public.customer_transactions.id;
 
 
 --
--- Name: sessions; Type: TABLE; Schema: public; Owner: postgres
+-- Name: customers; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.sessions (
+CREATE TABLE public.customers (
     id integer NOT NULL,
-    id_user integer,
-    token text
+    name text NOT NULL,
+    email text NOT NULL,
+    password text NOT NULL
 );
 
 
-ALTER TABLE public.sessions OWNER TO postgres;
+ALTER TABLE public.customers OWNER TO postgres;
 
 --
--- Name: sessions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: customers_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE SEQUENCE public.sessions_id_seq
+CREATE SEQUENCE public.customers_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -84,34 +82,35 @@ CREATE SEQUENCE public.sessions_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.sessions_id_seq OWNER TO postgres;
+ALTER TABLE public.customers_id_seq OWNER TO postgres;
 
 --
--- Name: sessions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: customers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.sessions_id_seq OWNED BY public.sessions.id;
+ALTER SEQUENCE public.customers_id_seq OWNED BY public.customers.id;
 
 
 --
--- Name: users; Type: TABLE; Schema: public; Owner: postgres
+-- Name: transactions; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.users (
+CREATE TABLE public.transactions (
     id integer NOT NULL,
-    name text,
-    email text,
-    password text
+    value numeric NOT NULL,
+    type text NOT NULL,
+    date date NOT NULL,
+    describe text NOT NULL
 );
 
 
-ALTER TABLE public.users OWNER TO postgres;
+ALTER TABLE public.transactions OWNER TO postgres;
 
 --
--- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: transactions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE SEQUENCE public.users_id_seq
+CREATE SEQUENCE public.transactions_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -120,79 +119,127 @@ CREATE SEQUENCE public.users_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.users_id_seq OWNER TO postgres;
+ALTER TABLE public.transactions_id_seq OWNER TO postgres;
 
 --
--- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: transactions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
-
-
---
--- Name: payments id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.payments ALTER COLUMN id SET DEFAULT nextval('public.payments_id_seq'::regclass);
+ALTER SEQUENCE public.transactions_id_seq OWNED BY public.transactions.id;
 
 
 --
--- Name: sessions id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: customer_transactions id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.sessions ALTER COLUMN id SET DEFAULT nextval('public.sessions_id_seq'::regclass);
-
-
---
--- Name: users id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+ALTER TABLE ONLY public.customer_transactions ALTER COLUMN id SET DEFAULT nextval('public.customer_transactions_id_seq'::regclass);
 
 
 --
--- Data for Name: payments; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Name: customers id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-COPY public.payments (id, id_user, value, type, date, describe) FROM stdin;
+ALTER TABLE ONLY public.customers ALTER COLUMN id SET DEFAULT nextval('public.customers_id_seq'::regclass);
+
+
+--
+-- Name: transactions id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.transactions ALTER COLUMN id SET DEFAULT nextval('public.transactions_id_seq'::regclass);
+
+
+--
+-- Data for Name: customer_transactions; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.customer_transactions (id, id_customer, id_transaction) FROM stdin;
 \.
 
 
 --
--- Data for Name: sessions; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: customers; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.sessions (id, id_user, token) FROM stdin;
+COPY public.customers (id, name, email, password) FROM stdin;
 \.
 
 
 --
--- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: transactions; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.users (id, name, email, password) FROM stdin;
+COPY public.transactions (id, value, type, date, describe) FROM stdin;
 \.
 
 
 --
--- Name: payments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: customer_transactions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.payments_id_seq', 31, true);
-
-
---
--- Name: sessions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.sessions_id_seq', 104, true);
+SELECT pg_catalog.setval('public.customer_transactions_id_seq', 77, true);
 
 
 --
--- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: customers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.users_id_seq', 99, true);
+SELECT pg_catalog.setval('public.customers_id_seq', 330, true);
+
+
+--
+-- Name: transactions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.transactions_id_seq', 79, true);
+
+
+--
+-- Name: customer_transactions customer_transactions_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.customer_transactions
+    ADD CONSTRAINT customer_transactions_pk PRIMARY KEY (id);
+
+
+--
+-- Name: customers customers_email_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.customers
+    ADD CONSTRAINT customers_email_key UNIQUE (email);
+
+
+--
+-- Name: customers customers_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.customers
+    ADD CONSTRAINT customers_pk PRIMARY KEY (id);
+
+
+--
+-- Name: transactions transactions_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.transactions
+    ADD CONSTRAINT transactions_pk PRIMARY KEY (id);
+
+
+--
+-- Name: customer_transactions customer_transactions_fk0; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.customer_transactions
+    ADD CONSTRAINT customer_transactions_fk0 FOREIGN KEY (id_customer) REFERENCES public.customers(id);
+
+
+--
+-- Name: customer_transactions customer_transactions_fk1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.customer_transactions
+    ADD CONSTRAINT customer_transactions_fk1 FOREIGN KEY (id_transaction) REFERENCES public.transactions(id);
 
 
 --
