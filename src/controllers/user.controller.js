@@ -38,7 +38,7 @@ async function getUser(req, res) {
     const user = resul.rows[0];
 
     if (!user || !bcrypt.compareSync(password, user.password))
-      return res.sendStatus(404);
+      return res.sendStatus(400);
 
     const data = { userId: user.id };
     const config = { expiresIn: 60 * 60 * 24 };
